@@ -18,77 +18,24 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapter.MoviesAdapter;
-import model.Movie;
-import model.MovieResponse;
-import rest.ApiClient;
-import rest.ApiInterface;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final static String API_KEY = "5cf13b15ffeb47814715e8791db9ac32";
-    private final static String TAG = "Retrolog";
+
     private Toolbar mToolbar;
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        //Set the recyler view
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.movies_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        //Check if the API key is set
-        if (API_KEY.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Please obtain your API KEY from themoviedb.org first!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-
-        Call<MovieResponse> call = apiService.getTopRatedMovies(API_KEY);
-
-        call.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                List<Movie> movies = response.body().getResults();
-                int movieCount = response.body().getTotalResults();
-                Log.d(TAG, "Number of movies received: " + movies.size());
-                Log.d(TAG, "Movie count: " + movieCount);
-                recyclerView.setAdapter(new MoviesAdapter(movies, R.layout.list_item_movie, getApplicationContext()));
-            }
-
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-                // Log error here since request failed
-                Log.e(TAG, t.toString());
-            }
-        });
-
-    }
-
-//
+//    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
 //
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+//        mToolbar = (Toolbar) findViewById(R.id.toolbar);
 //
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//
+//        setSupportActionBar(mToolbar);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
 //
 //        viewPager = (ViewPager) findViewById(R.id.viewpager);
 //        setupViewPager(viewPager);
@@ -126,12 +73,30 @@ public class MainActivity extends AppCompatActivity {
 //                Log.e(TAG, t.toString());
 //            }
 //        });
+//
 //    }
+
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+    }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new OneFragment(), "ONE");
-        adapter.addFragment(new TwoFragment(), "TWO");
+        adapter.addFragment(new OneFragment(), "Top Movies");
+        adapter.addFragment(new TwoFragment(), "Latest Movies");
+        adapter.addFragment(new ThreeFragment(), "Three");
         viewPager.setAdapter(adapter);
     }
 

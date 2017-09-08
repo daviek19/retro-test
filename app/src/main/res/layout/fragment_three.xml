@@ -4,13 +4,17 @@
     android:layout_height="match_parent"
     tools:context="com.sokonline.app.retrofit.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/movies_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <TextView
+        android:id="@+id/txtView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Three"
+        android:textSize="40dp"
+        android:textStyle="bold" />
 
     <LinearLayout
-        android:id="@+id/linear1"
+        android:id="@+id/linear3"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
